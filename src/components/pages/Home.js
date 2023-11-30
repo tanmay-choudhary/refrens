@@ -52,60 +52,74 @@ function Home() {
     setNameFilter(filterValue);
     setCurrentPage(1);
   };
+  const totalPages = 20; // Assuming you know the total number of pages
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
   return (
-    <div className="p-8">
-      <FilterComponent
-        onFilterChange={handleFilterChange}
-        setCharacterSelected={setCharacterSelected}
-      />
-      <button
-        onClick={handleToggleFilterDrawer}
-        className="px-4 py-2 bg-green-500 text-white rounded"
-      >
-        Show Filters
-      </button>
-      {showFilterDrawer && <FilterDrawer onFilterApply={handleFilterApply} />}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          cardData.map((card) => (
-            <CardComponent
-              key={card.id}
-              name={card.name}
-              status={card.status}
-              imageSrc={card.image}
-              location={card.location.name}
-              gender={card.gender}
-              species={card.species}
-              type={card.type}
-              episode={card.episode[0]}
+    <>
+      <div className="p-8 flex">
+        <div className="w-1/4">
+          <div className="sticky top-0">
+            <FilterComponent
+              onFilterChange={handleFilterChange}
+              setCharacterSelected={setCharacterSelected}
             />
-          ))
-        )}
-      </div>
+            <button
+              onClick={handleToggleFilterDrawer}
+              className="px-4 py-2 bg-green-500 text-white rounded"
+            >
+              Show Filters
+            </button>
+            {showFilterDrawer && (
+              <FilterDrawer onFilterApply={handleFilterApply} />
+            )}
+          </div>
+        </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            cardData.map((card) => (
+              <CardComponent
+                key={card.id}
+                name={card.name}
+                status={card.status}
+                imageSrc={card.image}
+                location={card.location.name}
+                gender={card.gender}
+                species={card.species}
+                type={card.type}
+                episode={card.episode[0]}
+              />
+            ))
+          )}
+        </div>
+      </div>
       {!characterSelected && (
         <div className="mt-4 flex justify-center">
           <button
-            onClick={() =>
-              setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))
-            }
+            onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
           >
             Previous Page
           </button>
+          <span className="mx-2">
+            Page {currentPage} of {totalPages}
+          </span>
           <button
-            onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
             className="px-4 py-2 bg-blue-500 text-white rounded"
           >
             Next Page
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
