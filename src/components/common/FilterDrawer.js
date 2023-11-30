@@ -11,12 +11,18 @@ const FilterDrawer = ({ onFilterApply }) => {
   const handleApplyFilters = () => {
     onFilterApply(state);
   };
-
   const handleClearFilters = () => {
     dispatch({ type: "CLEAR_FILTERS" });
-    console.log(state);
-    onFilterApply(state);
+    onFilterApply({
+      status: "",
+      location: "",
+      episode: "",
+      gender: "",
+      species: "",
+      type: "",
+    });
   };
+
   return (
     <div className="drawer p-4 border rounded bg-white">
       <div className="mb-4">
@@ -112,13 +118,12 @@ const FilterDrawer = ({ onFilterApply }) => {
           <option value="unknown">Unknown</option>
         </select>
       </div>
-      {/* <button
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 mr-2"
+      <button
+        className="bg-gray-300 text-gray-700 p-2 rounded hover:bg-gray-400"
         onClick={handleClearFilters}
       >
         Clear Filters
-  </button> */}
-
+      </button>
       <button
         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
         onClick={handleApplyFilters}

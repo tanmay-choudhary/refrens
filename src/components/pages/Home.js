@@ -24,10 +24,12 @@ function Home() {
 
   const fetchCharacters = async (page) => {
     try {
-      const filterParams = new URLSearchParams(appliedFilters).toString();
-      console.log(filterParams);
+      const filterParams = new URLSearchParams({
+        ...appliedFilters,
+        name: nameFilter,
+      }).toString();
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character?page=${page}&name=${nameFilter}&${filterParams}`
+        `https://rickandmortyapi.com/api/character?page=${page}&${filterParams}`
       );
 
       if (!response.ok) {
@@ -52,11 +54,13 @@ function Home() {
     setNameFilter(filterValue);
     setCurrentPage(1);
   };
+
   const totalPages = 20; // Assuming you know the total number of pages
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+
   return (
     <>
       <div className="p-8 flex">
