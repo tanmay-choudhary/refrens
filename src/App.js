@@ -1,8 +1,8 @@
-// App.js
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import CardComponent from "./components/common/CardComponent";
 import FilterComponent from "./components/common/FilterComponent";
+import FilterDrawer from "./components/common/FilterDrawer";
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,11 +10,24 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [nameFilter, setNameFilter] = useState("");
   const [characterSelected, setCharacterSelected] = useState(false);
+  const [showFilterDrawer, setShowFilterDrawer] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState({});
+
+  const handleToggleFilterDrawer = () => {
+    setShowFilterDrawer((prev) => !prev);
+  };
+
+  const handleFilterApply = (filters) => {
+    setAppliedFilters(filters);
+    setShowFilterDrawer(false);
+    setCurrentPage(1);
+  };
 
   const fetchCharacters = async (page) => {
     try {
+      const filterParams = new URLSearchParams(appliedFilters).toString();
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character?page=${page}&name=${nameFilter}`
+        `https://rickandmortyapi.com/api/character?page=${page}&name=${nameFilter}&${filterParams}`
       );
 
       if (!response.ok) {
@@ -33,11 +46,11 @@ function App() {
   useEffect(() => {
     setLoading(true);
     fetchCharacters(currentPage);
-  }, [currentPage, nameFilter]);
+  }, [currentPage, nameFilter, appliedFilters]);
 
   const handleFilterChange = (filterValue) => {
     setNameFilter(filterValue);
-    setCurrentPage(1); // Reset to the first page when the filter changes
+    setCurrentPage(1);
   };
 
   return (
@@ -46,6 +59,13 @@ function App() {
         onFilterChange={handleFilterChange}
         setCharacterSelected={setCharacterSelected}
       />
+      <button
+        onClick={handleToggleFilterDrawer}
+        className="px-4 py-2 bg-green-500 text-white rounded"
+      >
+        Show Filters
+      </button>
+      {showFilterDrawer && <FilterDrawer onFilterApply={handleFilterApply} />}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {loading ? (
           <p>Loading...</p>
@@ -65,8 +85,8 @@ function App() {
           ))
         )}
       </div>
+
       {!characterSelected && (
-        // Render pagination buttons only if a character is not selected
         <div className="mt-4 flex justify-center">
           <button
             onClick={() =>

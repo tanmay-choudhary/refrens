@@ -1,12 +1,9 @@
-// FilterComponent.js
 import React, { useState, useEffect } from "react";
 
 const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
   const [filterValue, setFilterValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
-
-  // Debounce function to delay API calls
   const debounce = (func, delay) => {
     let timer;
     return function (...args) {
@@ -37,15 +34,13 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
       setSuggestions([]);
       return;
     }
-
-    // Use debounce to delay API call
     const delayedFetchSuggestions = debounce(fetchSuggestions, 300);
     delayedFetchSuggestions(filterValue);
   }, [filterValue]);
 
   const handleFilterChange = (value) => {
     setFilterValue(value);
-    setSelectedCharacter(null); // Reset selected character when the filter changes
+    setSelectedCharacter(null);
     setCharacterSelected(false);
   };
 
