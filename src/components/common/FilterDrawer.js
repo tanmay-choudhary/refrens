@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
+import { useFilterContext } from "../contexts/FilterContext";
 
 const FilterDrawer = ({ onFilterApply }) => {
-  const [filterValues, setFilterValues] = useState({
-    status: "",
-    location: "",
-    episode: "",
-    gender: "",
-    species: "",
-    type: "",
-  });
+  const { state, dispatch } = useFilterContext();
 
   const handleFilterChange = (filter, value) => {
-    setFilterValues((prevValues) => ({
-      ...prevValues,
-      [filter]: value,
-    }));
+    dispatch({ type: "SET_FILTER", filter, value });
   };
 
   const handleApplyFilters = () => {
-    onFilterApply(filterValues);
+    onFilterApply(state);
   };
 
+  const handleClearFilters = () => {
+    dispatch({ type: "CLEAR_FILTERS" });
+    console.log(state);
+    onFilterApply(state);
+  };
   return (
     <div className="drawer p-4 border rounded bg-white">
       <div className="mb-4">
@@ -29,7 +25,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={filterValues.status}
+          value={state.status}
           onChange={(e) => handleFilterChange("status", e.target.value)}
         >
           <option value="">Select Status</option>
@@ -45,7 +41,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={filterValues.location}
+          value={state.location}
           onChange={(e) => handleFilterChange("location", e.target.value)}
         >
           <option value="">Select Status</option>
@@ -61,7 +57,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={filterValues.episode}
+          value={state.episode}
           onChange={(e) => handleFilterChange("episode", e.target.value)}
         >
           <option value="">Select Status</option>
@@ -77,7 +73,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={filterValues.gender}
+          value={state.gender}
           onChange={(e) => handleFilterChange("gender", e.target.value)}
         >
           <option value="">Select Gender</option>
@@ -93,7 +89,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={filterValues.species}
+          value={state.species}
           onChange={(e) => handleFilterChange("species", e.target.value)}
         >
           <option value="">Select Status</option>
@@ -107,7 +103,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         <label className="block text-sm font-medium text-gray-700">Type:</label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={filterValues.type}
+          value={state.type}
           onChange={(e) => handleFilterChange("type", e.target.value)}
         >
           <option value="">Select Status</option>
@@ -116,6 +112,12 @@ const FilterDrawer = ({ onFilterApply }) => {
           <option value="unknown">Unknown</option>
         </select>
       </div>
+      {/* <button
+        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 mr-2"
+        onClick={handleClearFilters}
+      >
+        Clear Filters
+  </button> */}
 
       <button
         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700"

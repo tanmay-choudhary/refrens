@@ -26,6 +26,7 @@ function App() {
   const fetchCharacters = async (page) => {
     try {
       const filterParams = new URLSearchParams(appliedFilters).toString();
+      console.log(filterParams);
       const response = await fetch(
         `https://rickandmortyapi.com/api/character?page=${page}&name=${nameFilter}&${filterParams}`
       );
