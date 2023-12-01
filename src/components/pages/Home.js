@@ -13,12 +13,13 @@ function Home() {
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState({});
   const [isDesktop, setIsDesktop] = useState(false);
+  const placeholderImageUrl = "https://cdn.jobscout.work/assets/oops.jpg";
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024); // You can adjust the width threshold according to your needs
+      setIsDesktop(window.innerWidth >= 1024);
     };
 
-    handleResize(); // Call the function once to set the initial value
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -53,13 +54,56 @@ function Home() {
       }
 
       const data = await response.json();
-      //console.log(data);
-      setCardData(data.results);
+      console.log(filterParams, data);
+      const filteredResults = applyAdditionalFilters(data.results);
+      setCardData(filteredResults);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
     }
+  };
+
+  const applyAdditionalFilters = (results) => {
+    const filteredResults = results.filter((character) => {
+      if (appliedFilters.status && character.status !== appliedFilters.status) {
+        return false;
+      }
+
+      if (
+        appliedFilters.location &&
+        character.location.name.includes() !== appliedFilters.location
+      ) {
+        console.log(appliedFilters.location, character.location.name);
+        return false;
+      }
+
+      if (
+        appliedFilters.episode &&
+        !character.episode.includes(appliedFilters.episode)
+      ) {
+        return false;
+      }
+
+      if (appliedFilters.gender && character.gender !== appliedFilters.gender) {
+        return false;
+      }
+
+      if (
+        appliedFilters.species &&
+        character.species !== appliedFilters.species
+      ) {
+        return false;
+      }
+
+      if (appliedFilters.type && character.type !== appliedFilters.type) {
+        return false;
+      }
+
+      return true;
+    });
+
+    return filteredResults;
   };
 
   useEffect(() => {
@@ -72,8 +116,7 @@ function Home() {
     setCurrentPage(1);
   };
 
-  const totalPages = 20; // Assuming you know the total number of pages
-
+  const totalPages = 48;
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
@@ -130,6 +173,15 @@ function Home() {
               )}
             </div>
           </div>
+          {!loading && cardData.length === 0 && (
+            <div className="flex justify-center items-center col-span-2">
+              <img
+                src={placeholderImageUrl}
+                alt="No data available"
+                className="max-w-full h-auto md:max-w-md lg:max-w-lg xl:max-w-xl"
+              />
+            </div>
+          )}
           {!characterSelected && (
             <div className="mt-4 mb-5 flex justify-center">
               <button
@@ -204,7 +256,15 @@ function Home() {
                 </button>
               </div>
             )}
-
+            {!loading && cardData.length === 0 && (
+              <div className="flex justify-center items-center col-span-2">
+                <img
+                  src={placeholderImageUrl}
+                  alt="No data available"
+                  className="max-w-full h-auto md:max-w-md lg:max-w-lg xl:max-w-xl"
+                />
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-4">
               {loading ? (
                 <>

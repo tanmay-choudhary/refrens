@@ -64,21 +64,21 @@ const FilterDrawer = ({ onFilterApply, setShowFilterDrawer }) => {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Location:
+          Species:
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={state.location}
-          onChange={(e) => handleFilterChange("location", e.target.value)}
+          value={state.species}
+          onChange={(e) => handleFilterChange("species", e.target.value)}
         >
           <option value="">Select Status</option>
-          <option value="Alive">Alive</option>
-          <option value="Dead">Dead</option>
+          <option value="Human">Human</option>
+          <option value="Alien">Alien</option>
           <option value="unknown">Unknown</option>
         </select>
       </div>
 
-      <div className="mb-4">
+      {/*<div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
           Episode:
         </label>
@@ -92,7 +92,7 @@ const FilterDrawer = ({ onFilterApply, setShowFilterDrawer }) => {
           <option value="Dead">Dead</option>
           <option value="unknown">Unknown</option>
         </select>
-      </div>
+  </div> */}
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
@@ -112,20 +112,18 @@ const FilterDrawer = ({ onFilterApply, setShowFilterDrawer }) => {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">
-          Species:
+          Location:
         </label>
         <select
           className="mt-1 p-2 border rounded w-full"
-          value={state.species}
-          onChange={(e) => handleFilterChange("species", e.target.value)}
+          value={state.location}
+          onChange={(e) => handleFilterChange("location", e.target.value)}
         >
           <option value="">Select Status</option>
-          <option value="Alive">Alive</option>
-          <option value="Dead">Dead</option>
-          <option value="unknown">Unknown</option>
+          <option value="Earth">Earth</option>
+          <option value="Dead">Abadango</option>
         </select>
       </div>
-
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Type:</label>
         <select
@@ -134,8 +132,8 @@ const FilterDrawer = ({ onFilterApply, setShowFilterDrawer }) => {
           onChange={(e) => handleFilterChange("type", e.target.value)}
         >
           <option value="">Select Status</option>
-          <option value="Alive">Alive</option>
-          <option value="Dead">Dead</option>
+          <option value="Parasite">Parasite</option>
+          <option value="Mytholog">Mytholog</option>
           <option value="unknown">Unknown</option>
         </select>
       </div>
