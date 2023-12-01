@@ -129,7 +129,9 @@ function Home() {
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
+                className={`mr-2 px-4 py-2 ${
+                  currentPage === 1 ? "bg-red-500" : "bg-blue-500"
+                } text-white rounded`}
               >
                 Previous Page
               </button>
@@ -137,7 +139,9 @@ function Home() {
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className={`px-4 py-2 ${
+                  currentPage === totalPages ? "bg-red-500" : "bg-blue-500"
+                } text-white rounded`}
               >
                 Next Page
               </button>
