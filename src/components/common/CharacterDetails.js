@@ -104,7 +104,7 @@ const CharacterDetails = () => {
           <div className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Episodes</h3>
             <ul className="list-disc list-inside">
-              {episodeNames.map((episodeName, index) => (
+              {episodeNames.slice(0, 5).map((episodeName, index) => (
                 <li key={index}>{episodeName}</li>
               ))}
             </ul>
