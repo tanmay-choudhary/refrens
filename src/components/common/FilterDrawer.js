@@ -24,8 +24,8 @@ const FilterDrawer = ({ onFilterApply }) => {
   };
 
   return (
-    <div className="drawer p-4 border rounded bg-white">
-      <div className="mb-4">
+    <div className=" shadow-xl fixed right-0 top-0 h-[100vh] drawer py-4 px-7 border rounded bg-white">
+      <div className="mb-4 mt-4">
         <label className="block text-sm font-medium text-gray-700">
           Status:
         </label>
@@ -119,7 +119,7 @@ const FilterDrawer = ({ onFilterApply }) => {
         </select>
       </div>
       <button
-        className="bg-gray-300 text-gray-700 p-2 rounded hover:bg-gray-400"
+        className="bg-gray-300 text-gray-700 p-2 rounded hover:bg-gray-400 mr-2"
         onClick={handleClearFilters}
       >
         Clear Filters

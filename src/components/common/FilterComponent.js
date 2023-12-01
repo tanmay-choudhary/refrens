@@ -59,28 +59,27 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
   };
 
   return (
-    <div className="mb-4">
-      <label htmlFor="nameFilter" className="mr-2">
-        Filter by Name:
-      </label>
-      <input
-        type="text"
-        id="nameFilter"
-        placeholder="Enter name..."
-        value={filterValue}
-        onChange={(e) => handleFilterChange(e.target.value)}
-        className="border border-gray-300 px-2 py-1 rounded"
-      />
-      {selectedCharacter && (
-        <button
-          onClick={handleClearSelection}
-          className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
-        >
-          Clear Selection
-        </button>
-      )}
+    <div className="mb-4 relative ">
+      <div className="lg:flex lg:flex-row  flex flex-col items-center justify-between ">
+        <input
+          type="text"
+          id="nameFilter"
+          placeholder="Search by name... "
+          value={filterValue}
+          onChange={(e) => handleFilterChange(e.target.value)}
+          className="border border-gray-300 px-2 py-1 rounded"
+        />
+        {selectedCharacter && (
+          <button
+            onClick={handleClearSelection}
+            className="mt-4 lg:mt-0  ml-2 px-2 py-1 bg-red-500 text-white rounded"
+          >
+            Clear Selection
+          </button>
+        )}
+      </div>
       {suggestions.length > 0 && filterValue.trim() !== "" && (
-        <ul className="mt-2 border border-gray-300 rounded">
+        <ul className="absolute mt-2 border border-gray-300 rounded bg-white">
           {suggestions.slice(0, 5).map((suggestion) => (
             <li
               key={suggestion.id}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CardComponent from "../common/CardComponent";
 import FilterComponent from "../common/FilterComponent";
 import FilterDrawer from "../common/FilterDrawer";
+import Loader from "../common/Loader";
 
 function Home() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,47 +64,53 @@ function Home() {
 
   return (
     <>
-      <div className="p-8 flex">
-        <div className="w-1/4">
-          <div className="sticky top-0">
-            <FilterComponent
-              onFilterChange={handleFilterChange}
-              setCharacterSelected={setCharacterSelected}
-            />
-            <button
-              onClick={handleToggleFilterDrawer}
-              className="px-4 py-2 bg-green-500 text-white rounded"
-            >
-              Show Filters
-            </button>
-            {showFilterDrawer && (
-              <FilterDrawer onFilterApply={handleFilterApply} />
-            )}
+      <div className="p-8">
+        <div className="">
+          <div className=" lg:flex lg:flex-row flex flex-col items-center justify-between mb-3">
+            <div>
+              <FilterComponent
+                onFilterChange={handleFilterChange}
+                setCharacterSelected={setCharacterSelected}
+              />
+            </div>
+            <div>
+              <button
+                onClick={handleToggleFilterDrawer}
+                className="px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Show Filters
+              </button>
+              {showFilterDrawer && (
+                <FilterDrawer onFilterApply={handleFilterApply} />
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-4">
           {loading ? (
-            <p>Loading...</p>
+            <>
+              <Loader />
+            </>
           ) : (
             cardData.map((card) => (
               <CardComponent
                 key={card.id}
-                name={card.name}
-                status={card.status}
-                imageSrc={card.image}
-                location={card.location.name}
-                gender={card.gender}
-                species={card.species}
-                type={card.type}
-                episode={card.episode[0]}
+                name={card?.name || "N/A"}
+                status={card?.status || "N/A"}
+                imageSrc={card?.image || "N/A"}
+                location={card?.location?.name || "N/A"}
+                gender={card?.gender || "N/A"}
+                species={card?.species || "N/A"}
+                type={card?.type || "N/A"}
+                episode={card?.episode[0]}
               />
             ))
           )}
         </div>
       </div>
       {!characterSelected && (
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 mb-5 flex justify-center">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -111,7 +118,7 @@ function Home() {
           >
             Previous Page
           </button>
-          <span className="mx-2">
+          <span className="mx-4 mt-2">
             Page {currentPage} of {totalPages}
           </span>
           <button
