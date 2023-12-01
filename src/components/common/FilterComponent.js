@@ -4,6 +4,7 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
   const [filterValue, setFilterValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [showSuggestion, setShowSuggestion] = useState(false);
   const debounce = (func, delay) => {
     let timer;
     return function (...args) {
@@ -23,7 +24,14 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
       }
 
       const data = await response.json();
-      setSuggestions(data.results);
+
+      if (data.results.length > 0) {
+        setShowSuggestion(true);
+        setSuggestions(data.results);
+      } else {
+        setShowSuggestion(false);
+        setSuggestions([]);
+      }
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
@@ -31,9 +39,11 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
 
   useEffect(() => {
     if (filterValue.trim() === "") {
+      setShowSuggestion(false);
       setSuggestions([]);
       return;
     }
+
     const delayedFetchSuggestions = debounce(fetchSuggestions, 300);
     delayedFetchSuggestions(filterValue);
   }, [filterValue]);
@@ -49,6 +59,7 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
     onFilterChange(suggestion.name);
     setSelectedCharacter(suggestion);
     setCharacterSelected(true);
+    setShowSuggestion(false);
   };
 
   const handleClearSelection = () => {
@@ -56,11 +67,12 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
     onFilterChange("");
     setSelectedCharacter(null);
     setCharacterSelected(false);
+    setShowSuggestion(false);
   };
 
   return (
-    <div className="mb-4 relative ">
-      <div className="lg:flex lg:flex-row  flex flex-col items-center justify-between ">
+    <div className="mb-4 relative">
+      <div className="lg:flex lg:flex-row flex flex-col items-center justify-between">
         <input
           type="text"
           id="nameFilter"
@@ -72,13 +84,13 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
         {selectedCharacter && (
           <button
             onClick={handleClearSelection}
-            className="mt-4 lg:mt-0  ml-2 px-2 py-1 bg-red-500 text-white rounded"
+            className="mt-4 lg:mt-0 ml-2 px-2 py-1 bg-red-500 text-white rounded"
           >
             Clear Selection
           </button>
         )}
       </div>
-      {suggestions.length > 0 && filterValue.trim() !== "" && (
+      {showSuggestion && suggestions.length > 0 && filterValue.trim() !== "" && (
         <ul className="absolute mt-2 border border-gray-300 rounded bg-white">
           {suggestions.slice(0, 5).map((suggestion) => (
             <li

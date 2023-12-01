@@ -41,8 +41,11 @@ function Home() {
         ...appliedFilters,
         name: nameFilter,
       }).toString();
+      const nameParams = new URLSearchParams({
+        name: nameFilter,
+      }).toString();
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character?page=${page}&${filterParams}`
+        `https://rickandmortyapi.com/api/character?page=${page}&${filterParams}&${nameParams}`
       );
 
       if (!response.ok) {
@@ -96,7 +99,10 @@ function Home() {
                     Show Filters
                   </button>
                   {showFilterDrawer && (
-                    <FilterDrawer onFilterApply={handleFilterApply} />
+                    <FilterDrawer
+                      onFilterApply={handleFilterApply}
+                      setShowFilterDrawer={setShowFilterDrawer}
+                    />
                   )}
                 </div>
               </div>
@@ -167,7 +173,10 @@ function Home() {
                     Show Filters
                   </button>
                   {showFilterDrawer && (
-                    <FilterDrawer onFilterApply={handleFilterApply} />
+                    <FilterDrawer
+                      onFilterApply={handleFilterApply}
+                      setShowFilterDrawer={setShowFilterDrawer}
+                    />
                   )}
                 </div>
               </div>

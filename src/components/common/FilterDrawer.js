@@ -1,7 +1,7 @@
 import React from "react";
 import { useFilterContext } from "../contexts/FilterContext";
 
-const FilterDrawer = ({ onFilterApply }) => {
+const FilterDrawer = ({ onFilterApply, setShowFilterDrawer }) => {
   const { state, dispatch } = useFilterContext();
 
   const handleFilterChange = (filter, value) => {
@@ -22,9 +22,30 @@ const FilterDrawer = ({ onFilterApply }) => {
       type: "",
     });
   };
-
+  const handleCloseDrawer = () => {
+    setShowFilterDrawer(false);
+  };
   return (
     <div className=" shadow-xl fixed right-0 top-0 h-[100vh] drawer py-4 px-7 border rounded bg-white">
+      <button
+        className="absolute top-2 right-2 p-2 text-gray-700 hover:text-gray-900"
+        onClick={handleCloseDrawer}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="h-6 w-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
       <div className="mb-4 mt-4">
         <label className="block text-sm font-medium text-gray-700">
           Status:
