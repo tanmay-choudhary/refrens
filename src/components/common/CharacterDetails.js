@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 const CharacterDetails = () => {
   const { id } = useParams();
   const [character, setCharacter] = useState(null);
-  console.log(id);
+  const [episodeNames, setEpisodeNames] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -12,8 +13,27 @@ const CharacterDetails = () => {
           `https://rickandmortyapi.com/api/character/${id}`
         );
         const data = await response.json();
-        console.log(data);
         setCharacter(data);
+
+        const episodePromises = data.episode.map(async (episodeUrl) => {
+          try {
+            const episodeResponse = await fetch(episodeUrl);
+            const episodeData = await episodeResponse.json();
+            return episodeData.name;
+          } catch (error) {
+            console.error("Error fetching episode data:", error);
+            return null;
+          }
+        });
+        // Hi Refrense I am,
+        // Utilizing Promise.allSettled for episode promises to ensure fault tolerance.
+        // settledEpisodes will contain information on the outcome of each episode fetch,
+        // allowing for comprehensive error handling and successful data retrieval.
+        const settledEpisodes = await Promise.allSettled(episodePromises);
+        const episodeNames = settledEpisodes
+          .filter((result) => result.status === "fulfilled")
+          .map((result) => result.value);
+        setEpisodeNames(episodeNames);
       } catch (error) {
         console.error("Error fetching character data:", error);
       }
@@ -39,10 +59,10 @@ const CharacterDetails = () => {
           viewBox="0 0 24 24"
           fill="none"
           stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-arrow-left"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-arrow-left"
         >
           <path d="m12 19-7-7 7-7" />
           <path d="M19 12H5" />
@@ -84,8 +104,8 @@ const CharacterDetails = () => {
           <div className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Episodes</h3>
             <ul className="list-disc list-inside">
-              {character?.episodes?.map((episode) => (
-                <li key={episode.id}>{episode.name}</li>
+              {episodeNames.map((episodeName, index) => (
+                <li key={index}>{episodeName}</li>
               ))}
             </ul>
           </div>
