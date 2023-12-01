@@ -2,6 +2,8 @@ import React from "react";
 import { useFilterContext } from "../contexts/FilterContext";
 
 const FilterDrawer = ({ onFilterApply, setShowFilterDrawer }) => {
+  //Hi reference
+  // I have utilized useContext and useReducer to manage the context of filters.
   const { state, dispatch } = useFilterContext();
 
   const handleFilterChange = (filter, value) => {

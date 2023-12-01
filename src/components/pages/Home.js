@@ -14,6 +14,8 @@ function Home() {
   const [appliedFilters, setAppliedFilters] = useState({});
   const [isDesktop, setIsDesktop] = useState(false);
   const placeholderImageUrl = "https://cdn.jobscout.work/assets/oops.jpg";
+  //Hi reference
+  // I have CDN here from my own server in AWS , jobscout.work is my pet project.
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);

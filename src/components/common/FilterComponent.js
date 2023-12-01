@@ -5,6 +5,8 @@ const FilterComponent = ({ onFilterChange, setCharacterSelected }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [showSuggestion, setShowSuggestion] = useState(false);
+  //Hi reference
+  // I have utilized debouncing here
   const debounce = (func, delay) => {
     let timer;
     return function (...args) {
