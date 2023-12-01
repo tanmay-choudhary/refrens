@@ -13,7 +13,10 @@ function CardComponent({
 }) {
   //console.log(cardKey);
   return (
-    <div className="lg:w-106 2xl:w-106 w-full mx-auto bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row 2xl:flex-row justify-center">
+    <div
+      className="lg:w-106 2xl:w-106 w-full mx-auto bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row 2xl:flex-row justify-center"
+      data-testid="card-component"
+    >
       <div className="lg:w-1/3 2xl:w-1/3">
         <img
           className="w-full h-48 lg:h-full object-contain"
@@ -50,7 +53,8 @@ function CardComponent({
           </p>
         </div>
         <p className="text-gray-600 mb-2">
-          <span className="font-bold">Episode:</span> {episode}
+          <span className="font-bold">Episode:</span>{" "}
+          {episode?.length ? episode[0] : ""}
         </p>
       </div>
     </div>

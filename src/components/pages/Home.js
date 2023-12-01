@@ -167,7 +167,8 @@ function Home() {
                     gender={card?.gender || "N/A"}
                     species={card?.species || "N/A"}
                     type={card?.type || "N/A"}
-                    episode={card?.episode[0]}
+                    episode={card?.episode}
+                    key={card.id}
                   />
                 ))
               )}
