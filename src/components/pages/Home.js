@@ -12,7 +12,19 @@ function Home() {
   const [characterSelected, setCharacterSelected] = useState(false);
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState({});
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024); // You can adjust the width threshold according to your needs
+    };
 
+    handleResize(); // Call the function once to set the initial value
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   const handleToggleFilterDrawer = () => {
     setShowFilterDrawer((prev) => !prev);
   };
@@ -38,7 +50,7 @@ function Home() {
       }
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       setCardData(data.results);
       setLoading(false);
     } catch (error) {
@@ -65,71 +77,144 @@ function Home() {
 
   return (
     <>
-      <div className="p-8">
-        <div className="">
-          <div className=" lg:flex lg:flex-row flex flex-col items-center justify-between mb-3">
-            <div>
-              <FilterComponent
-                onFilterChange={handleFilterChange}
-                setCharacterSelected={setCharacterSelected}
-              />
+      {isDesktop ? (
+        <>
+          <div className="p-8">
+            <div className="">
+              <div className=" lg:flex lg:flex-row flex flex-col items-center justify-between mb-3">
+                <div>
+                  <FilterComponent
+                    onFilterChange={handleFilterChange}
+                    setCharacterSelected={setCharacterSelected}
+                  />
+                </div>
+                <div>
+                  <button
+                    onClick={handleToggleFilterDrawer}
+                    className="px-4 py-2 bg-green-500 text-white rounded"
+                  >
+                    Show Filters
+                  </button>
+                  {showFilterDrawer && (
+                    <FilterDrawer onFilterApply={handleFilterApply} />
+                  )}
+                </div>
+              </div>
             </div>
-            <div>
-              <button
-                onClick={handleToggleFilterDrawer}
-                className="px-4 py-2 bg-green-500 text-white rounded"
-              >
-                Show Filters
-              </button>
-              {showFilterDrawer && (
-                <FilterDrawer onFilterApply={handleFilterApply} />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-4">
+              {loading ? (
+                <>
+                  <Loader />
+                </>
+              ) : (
+                cardData.map((card) => (
+                  <CardComponent
+                    cardKey={card.id}
+                    name={card?.name || "N/A"}
+                    status={card?.status || "N/A"}
+                    imageSrc={card?.image || "N/A"}
+                    location={card?.location?.name || "N/A"}
+                    gender={card?.gender || "N/A"}
+                    species={card?.species || "N/A"}
+                    type={card?.type || "N/A"}
+                    episode={card?.episode[0]}
+                  />
+                ))
               )}
             </div>
           </div>
-        </div>
+          {!characterSelected && (
+            <div className="mt-4 mb-5 flex justify-center">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Previous Page
+              </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-4">
-          {loading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
-            cardData.map((card) => (
-              <CardComponent
-                cardKey={card.id}
-                name={card?.name || "N/A"}
-                status={card?.status || "N/A"}
-                imageSrc={card?.image || "N/A"}
-                location={card?.location?.name || "N/A"}
-                gender={card?.gender || "N/A"}
-                species={card?.species || "N/A"}
-                type={card?.type || "N/A"}
-                episode={card?.episode[0]}
-              />
-            ))
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Next Page
+              </button>
+            </div>
           )}
-        </div>
-      </div>
-      {!characterSelected && (
-        <div className="mt-4 mb-5 flex justify-center">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Previous Page
-          </button>
-          <span className="mx-4 mt-2">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Next Page
-          </button>
-        </div>
+        </>
+      ) : (
+        <>
+          <div className="p-8">
+            <div className="">
+              <div className=" lg:flex lg:flex-row flex flex-col items-center justify-between mb-3">
+                <div>
+                  <FilterComponent
+                    onFilterChange={handleFilterChange}
+                    setCharacterSelected={setCharacterSelected}
+                  />
+                </div>
+                <div>
+                  <button
+                    onClick={handleToggleFilterDrawer}
+                    className="px-4 py-2 bg-green-500 text-white rounded"
+                  >
+                    Show Filters
+                  </button>
+                  {showFilterDrawer && (
+                    <FilterDrawer onFilterApply={handleFilterApply} />
+                  )}
+                </div>
+              </div>
+            </div>
+            {!characterSelected && (
+              <div className="mt-4 mb-5 flex justify-center">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`mr-2 px-4 py-2 ${
+                    currentPage === 1 ? "bg-red-500" : "bg-blue-500"
+                  } text-white rounded`}
+                >
+                  Previous Page
+                </button>
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 ${
+                    currentPage === totalPages ? "bg-red-500" : "bg-blue-500"
+                  } text-white rounded`}
+                >
+                  Next Page
+                </button>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-4">
+              {loading ? (
+                <>
+                  <Loader />
+                </>
+              ) : (
+                cardData.map((card) => (
+                  <CardComponent
+                    cardKey={card.id}
+                    name={card?.name || "N/A"}
+                    status={card?.status || "N/A"}
+                    imageSrc={card?.image || "N/A"}
+                    location={card?.location?.name || "N/A"}
+                    gender={card?.gender || "N/A"}
+                    species={card?.species || "N/A"}
+                    type={card?.type || "N/A"}
+                    episode={card?.episode[0]}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        </>
       )}
     </>
   );

@@ -11,7 +11,7 @@ function CardComponent({
   episode,
   imageSrc,
 }) {
-  console.log(cardKey);
+  //console.log(cardKey);
   return (
     <div className="lg:w-106 2xl:w-106 w-full mx-auto bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row 2xl:flex-row justify-center">
       <div className="lg:w-1/3 2xl:w-1/3">
