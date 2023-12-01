@@ -38,6 +38,7 @@ function Home() {
       }
 
       const data = await response.json();
+      console.log(data);
       setCardData(data.results);
       setLoading(false);
     } catch (error) {
@@ -95,7 +96,7 @@ function Home() {
           ) : (
             cardData.map((card) => (
               <CardComponent
-                key={card.id}
+                cardKey={card.id}
                 name={card?.name || "N/A"}
                 status={card?.status || "N/A"}
                 imageSrc={card?.image || "N/A"}

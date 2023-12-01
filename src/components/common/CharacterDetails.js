@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-const CharacterDetails = ({ character }) => {
-  const {
-    name,
-    species,
-    gender,
-    image,
-    origin,
-    location,
-    episodes,
-  } = character;
+const CharacterDetails = () => {
+  const { id } = useParams();
+  const [character, setCharacter] = useState(null);
+  console.log(id);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://rickandmortyapi.com/api/character/${id}`
+        );
+        const data = await response.json();
+        console.log(data);
+        setCharacter(data);
+      } catch (error) {
+        console.error("Error fetching character data:", error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const goBack = () => {
     window.history.back();
@@ -39,35 +50,41 @@ const CharacterDetails = ({ character }) => {
       </button>
       <div className="lg:w-[70%] lg:h-[80vh] container mx-auto p-4 bg-gray-200 shadow-md rounded-md lg:flex  lg:flex-row items-center justify-between">
         <div className="flex-shrink-0">
-          <img src={image} alt={name} className="rounded-md mb-4" />
+          <img
+            src={character?.image}
+            alt={character?.name}
+            className="rounded-md mb-4"
+          />
         </div>
 
         <div className="ml-4">
-          <h2 className="text-xl font-semibold mb-2">{name}</h2>
+          <h2 className="text-xl font-semibold mb-2">{character?.name}</h2>
           <p className="text-gray-600 mb-2">
-            Species: {species} | Gender: {gender}
+            Species: {character?.species} | Gender: {character?.gender}
           </p>
 
           <div className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Origin</h3>
             <p className="text-gray-600 mb-2">
-              Name: {origin.name} | Dimension: {origin.dimension} | Residents:{" "}
-              {origin.residents.length}
+              Name: {character?.origin?.name} | Dimension:{" "}
+              {character?.origin?.dimension} | Residents:{" "}
+              {character?.origin?.residents?.length}
             </p>
           </div>
 
           <div className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Current Location</h3>
             <p className="text-gray-600 mb-2">
-              Name: {location.name} | Dimension: {location.dimension} |
-              Residents: {location.residents.length}
+              Name: {character?.location?.name} | Dimension:{" "}
+              {character?.location?.dimension} | Residents:{" "}
+              {character?.location?.residents?.length}
             </p>
           </div>
 
           <div className="mt-4">
             <h3 className="text-lg font-semibold mb-2">Episodes</h3>
             <ul className="list-disc list-inside">
-              {episodes.map((episode) => (
+              {character?.episodes?.map((episode) => (
                 <li key={episode.id}>{episode.name}</li>
               ))}
             </ul>

@@ -1,6 +1,7 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 function CardComponent({
+  cardKey,
   name,
   status,
   location,
@@ -10,6 +11,7 @@ function CardComponent({
   episode,
   imageSrc,
 }) {
+  console.log(cardKey);
   return (
     <div className="lg:w-106 2xl:w-106 w-full mx-auto bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row 2xl:flex-row justify-center">
       <div className="lg:w-1/3 2xl:w-1/3">
@@ -23,7 +25,13 @@ function CardComponent({
       <div className="p-4 flex flex-col justify-between lg:w-1/2 2xl:w-1/2">
         <div>
           <p className="text-gray-600 mb-2">
-            <span className="font-bold">Name:</span> {name}
+            <span className="font-bold">Name:</span>{" "}
+            <Link
+              to={`/CharacterDetails/${cardKey}`}
+              className="text-blue-500 hover:underline"
+            >
+              {name}
+            </Link>
           </p>
           <p className="text-gray-600 mb-2">
             <span className="font-bold">Status:</span> {status}
